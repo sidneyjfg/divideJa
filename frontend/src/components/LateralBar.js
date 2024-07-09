@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LateralBar.css';
 import profilePic from '../assets/images/profile.png';
 
@@ -7,6 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUsers, faPlus, faHistory, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const LateralBar = () => {
+    const [activeItem, setActiveItem] = useState('inicio');
+
+    const handleItemClick = (item) => {
+        setActiveItem(item);
+    };
+
     return (
         <div className="lateral-bar">
             <div className="profile-section">
@@ -17,27 +23,47 @@ const LateralBar = () => {
             <nav className="menu">
                 <ul>
                     <li>
-                        <a href="#inicio">
+                        <a
+                            href="#inicio"
+                            className={activeItem === 'inicio' ? 'active' : ''}
+                            onClick={() => handleItemClick('inicio')}
+                        >
                             <FontAwesomeIcon icon={faHome} className="menu-icon" /> INÍCIO
                         </a>
                     </li>
                     <li>
-                        <a href="#amigos">
+                        <a
+                            href="#amigos"
+                            className={activeItem === 'amigos' ? 'active' : ''}
+                            onClick={() => handleItemClick('amigos')}
+                        >
                             <FontAwesomeIcon icon={faUsers} className="menu-icon" /> AMIGOS
                         </a>
                     </li>
                     <li>
-                        <a href="#criar-mesa">
+                        <a
+                            href="#criar-mesa"
+                            className={activeItem === 'criar-mesa' ? 'active' : ''}
+                            onClick={() => handleItemClick('criar-mesa')}
+                        >
                             <FontAwesomeIcon icon={faPlus} className="menu-icon" /> CRIAR NOVA MESA
                         </a>
                     </li>
                     <li>
-                        <a href="#historico">
+                        <a
+                            href="#historico"
+                            className={activeItem === 'historico' ? 'active' : ''}
+                            onClick={() => handleItemClick('historico')}
+                        >
                             <FontAwesomeIcon icon={faHistory} className="menu-icon" /> HISTÓRICO
                         </a>
                     </li>
                     <li>
-                        <a href="#configuracoes">
+                        <a
+                            href="#configuracoes"
+                            className={activeItem === 'configuracoes' ? 'active' : ''}
+                            onClick={() => handleItemClick('configuracoes')}
+                        >
                             <FontAwesomeIcon icon={faCog} className="menu-icon" /> CONFIGURAÇÕES
                         </a>
                     </li>

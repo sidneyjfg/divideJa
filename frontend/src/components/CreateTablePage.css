@@ -1,0 +1,120 @@
+/* CreateTablePage.css */
+.create-table-page {
+    padding: 20px;
+    background-color: #f8f8f8;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.create-table-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #e65c00;
+}
+
+.tables {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.table-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.table-card.active {
+    transform: scale(1.05);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-header h2 {
+    margin: 0;
+}
+
+.status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.status.available {
+    background-color: green;
+}
+
+.status.unavailable {
+    background-color: red;
+}
+
+.arrow {
+    font-size: 20px;
+    transition: transform 0.3s;
+}
+
+.arrow.down {
+    transform: rotate(90deg);
+}
+
+.arrow.right {
+    transform: rotate(0deg);
+}
+
+.table-details {
+    margin-top: 10px;
+}
+
