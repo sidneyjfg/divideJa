@@ -16,7 +16,7 @@ const LateralBar = () => {
     return (
         <div className="lateral-bar">
             <div className="profile-section">
-                <img className="profile-pic" src={profilePic} alt="Profile" />
+                <img className="profile-pic" src={profilePic} alt="Employer profile" />
                 <h2>Felipe Monteleão</h2>
                 <p>#3456</p>
             </div>
@@ -24,7 +24,7 @@ const LateralBar = () => {
                 <ul>
                     <li>
                         <a
-                            href="#inicio"
+                            href="/"
                             className={activeItem === 'inicio' ? 'active' : ''}
                             onClick={() => handleItemClick('inicio')}
                         >
@@ -33,7 +33,7 @@ const LateralBar = () => {
                     </li>
                     <li>
                         <a
-                            href="#amigos"
+                            href="amigos"
                             className={activeItem === 'amigos' ? 'active' : ''}
                             onClick={() => handleItemClick('amigos')}
                         >
@@ -42,16 +42,16 @@ const LateralBar = () => {
                     </li>
                     <li>
                         <a
-                            href="#criar-mesa"
-                            className={activeItem === 'criar-mesa' ? 'active' : ''}
-                            onClick={() => handleItemClick('criar-mesa')}
+                            href="create-table"
+                            className={activeItem === 'create-table' ? 'active' : ''}
+                            onClick={() => handleItemClick('create-table')}
                         >
                             <FontAwesomeIcon icon={faPlus} className="menu-icon" /> CRIAR NOVA MESA
                         </a>
                     </li>
                     <li>
                         <a
-                            href="#historico"
+                            href="historico"
                             className={activeItem === 'historico' ? 'active' : ''}
                             onClick={() => handleItemClick('historico')}
                         >
@@ -60,7 +60,7 @@ const LateralBar = () => {
                     </li>
                     <li>
                         <a
-                            href="#configuracoes"
+                            href="configuracoes"
                             className={activeItem === 'configuracoes' ? 'active' : ''}
                             onClick={() => handleItemClick('configuracoes')}
                         >

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import './CreateTablePage.css';
+import Modal from '../components/Modal';
 
 const CreateTablePage = () => {
     const [tables, setTables] = useState([
-        { tableNumber: '1', numberOfPeople: '0', clients: [], status: 'available' },
-        { tableNumber: '2', numberOfPeople: '3', clients: ['Pedro', 'Paula', 'Fernanda'], status: 'unavailable' }
-    ]);
+        { tableNumber: '1', clients: ['João', 'Maria', 'Carlos', 'Ana'], status: 'available' },
+        { tableNumber: '2', clients: ['Pedro', 'Paula', 'Fernanda'], status: 'unavailable' }
+    ].map(table => ({
+        ...table,
+        numberOfPeople: table.clients.length.toString()
+    })));
     const [activeTable, setActiveTable] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentTable, setCurrentTable] = useState(null);
 
     const addTable = (newTable) => {
         setTables([...tables, newTable]);
@@ -14,6 +20,16 @@ const CreateTablePage = () => {
 
     const handleTableClick = (index) => {
         setActiveTable(activeTable === index ? null : index);
+    };
+
+    const handleEditClick = (table) => {
+        setCurrentTable(table);
+        setIsModalOpen(true);
+    };
+
+    const handleSaveTable = (updatedTable) => {
+        setTables(tables.map(table => (table.tableNumber === updatedTable.tableNumber ? updatedTable : table)));
+        setIsModalOpen(false);
     };
 
     return (
@@ -26,15 +42,19 @@ const CreateTablePage = () => {
                         table={table}
                         isActive={activeTable === index}
                         onClick={() => handleTableClick(index)}
+                        onEdit={() => handleEditClick(table)}
                     />
                 ))}
             </div>
             <CreateTableForm addTable={addTable} />
+            {isModalOpen && (
+                <Modal table={currentTable} onClose={() => setIsModalOpen(false)} onSave={handleSaveTable} />
+            )}
         </div>
     );
 };
 
-const TableCard = ({ table, isActive, onClick }) => {
+const TableCard = ({ table, isActive, onClick, onEdit }) => {
     return (
         <div className={`table-card ${isActive ? 'active' : ''}`} onClick={onClick}>
             <div className="table-header">
@@ -50,6 +70,7 @@ const TableCard = ({ table, isActive, onClick }) => {
                             <li key={i}>{client}</li>
                         ))}
                     </ul>
+                    <button onClick={onEdit}>Editar</button>
                 </div>
             )}
         </div>
@@ -58,7 +79,6 @@ const TableCard = ({ table, isActive, onClick }) => {
 
 const CreateTableForm = ({ addTable }) => {
     const [tableNumber, setTableNumber] = useState('');
-    const [numberOfPeople, setNumberOfPeople] = useState('');
     const [clientNames, setClientNames] = useState(['']);
     const [status, setStatus] = useState('available');
 
@@ -72,19 +92,26 @@ const CreateTableForm = ({ addTable }) => {
         setClientNames(newClientNames);
     };
 
+    const handleRemoveClient = (index) => {
+        setClientNames(clientNames.filter((_, i) => i !== index));
+    };
+
+    const handleClearForm = () => {
+        setTableNumber('');
+        setClientNames(['']);
+        setStatus('available');
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const newTable = {
             tableNumber,
-            numberOfPeople,
+            numberOfPeople: clientNames.filter(name => name !== '').length.toString(),
             clients: clientNames.filter(name => name !== ''),
             status
         };
         addTable(newTable);
-        setTableNumber('');
-        setNumberOfPeople('');
-        setClientNames(['']);
-        setStatus('available');
+        handleClearForm();
     };
 
     return (
@@ -100,24 +127,17 @@ const CreateTableForm = ({ addTable }) => {
                 />
             </div>
             <div className="form-group">
-                <label>Número de Pessoas:</label>
-                <input
-                    type="number"
-                    value={numberOfPeople}
-                    onChange={(e) => setNumberOfPeople(e.target.value)}
-                    required
-                />
-            </div>
-            <div className="form-group">
                 <label>Nomes dos Clientes:</label>
                 {clientNames.map((name, index) => (
-                    <input
-                        key={index}
-                        type="text"
-                        value={name}
-                        onChange={(e) => handleClientNameChange(index, e.target.value)}
-                        placeholder={`Cliente ${index + 1}`}
-                    />
+                    <div key={index} className="client-name">
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => handleClientNameChange(index, e.target.value)}
+                            placeholder={`Cliente ${index + 1}`}
+                        />
+                        <button type="button" onClick={() => handleRemoveClient(index)}>Remover</button>
+                    </div>
                 ))}
                 <button type="button" onClick={handleAddClient}>Adicionar Cliente</button>
             </div>
@@ -129,6 +149,7 @@ const CreateTableForm = ({ addTable }) => {
                 </select>
             </div>
             <button type="submit">Criar Mesa</button>
+            <button type="button" onClick={handleClearForm} className="clear-form">Limpar</button>
         </form>
     );
 };

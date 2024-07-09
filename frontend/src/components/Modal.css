@@ -1,0 +1,86 @@
+/* Modal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    width: 100%;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #e65c00;
+}
+
+.client-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.client-name input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.client-name button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+}
+
+.client-name button:hover {
+    background-color: #e65c00;
+}
