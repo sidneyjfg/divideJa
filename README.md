@@ -22,7 +22,7 @@ DivideJá é uma plataforma que facilita a divisão de contas entre amigos, de a
 - Inserção de despesas com descrição, valor e quem consumiu
 - Suporte para diferentes categorias de despesas
 - Divisão de Contas
-- 
+
 - Cálculo automático de quanto cada pessoa deve pagar
 - Visualização detalhada de como a conta foi dividida
 - Pagamento e Saldo
@@ -66,4 +66,49 @@ my-fullstack-app/
 ├── README.md
 └── package.json
 
+```
+
+Como trabalhar com as branchs 
+
+### Ir para a main
+``` bash
+git checkout main
+```
+### Puxar as últimas atualizações da main
+``` bash
+git pull origin main
+```
+### Mudar para a branch que deseja trabalhar
+``` bash
+git checkout updatesSidney
+```
+### Fazer as alterações e adicionar os arquivos modificados
+``` bash
+git add .
+```
+### Fazer um commit das alterações
+``` bash
+git commit -m "Alterações e features atualizadas"
+```
+### Fazer push das alterações para o repositório remoto
+``` bash
+git push origin updatesSidney
+```
+### Ir para a PreMerge
+``` bash
+git checkout PreMerge
+```
+### Puxar as últimas atualizações da PreMerge
+``` bash
+git pull origin PreMerge
+```
+### Mesclar a branch de trabalho na PreMerge
+``` bash
+git merge updatesSidney
+```
+### Resolver conflitos, se houver...
+
+### Fazer push das mudanças mescladas para o repositório remoto
+``` bash
+git push origin PreMerge
 ```
