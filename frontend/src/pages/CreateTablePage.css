@@ -26,6 +26,31 @@ h1, h2 {
     flex-direction: column;
 }
 
+.client-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.client-name input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.client-name button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+}
+
+.client-name button:hover {
+    background-color: #e65c00;
+}
+
 label {
     margin-bottom: 5px;
     font-weight: bold;
@@ -49,10 +74,19 @@ button {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-bottom: 10px;
 }
 
 button:hover {
     background-color: #e65c00;
+}
+
+.clear-form {
+    background-color: #999;
+}
+
+.clear-form:hover {
+    background-color: #777;
 }
 
 .tables {
@@ -118,3 +152,7 @@ button:hover {
     margin-top: 10px;
 }
 
+.table-card ul {
+    list-style-type: none;
+    padding: 0;
+}
