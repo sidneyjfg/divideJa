@@ -54,8 +54,8 @@
     color: #333;
     text-decoration: none;
     font-size: 1rem;
-    position: relative; /* Adicione isso */
-    transition: color 0.3s; /* Adicione isso */
+    position: relative;
+    transition: color 0.3s;
 }
 
 .menu a::after {
@@ -66,16 +66,18 @@
     width: 0;
     height: 2px;
     background-color: orange;
-    transition: width 0.3s ease, left 0.3s ease; /* Adicione isso */
+    transition: width 0.3s ease, left 0.3s ease;
 }
 
-.menu a:hover::after {
+.menu a:hover::after,
+.menu a.active::after {
     width: 100%;
     left: 0;
 }
 
-.menu a:hover {
-    color: #ff6600; /* Opcional, muda a cor do texto ao passar o mouse */
+.menu a:hover,
+.menu a.active {
+    color: #ff6600;
 }
 
 .menu-icon {
