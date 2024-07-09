@@ -111,4 +111,3 @@ git merge updatesSidney
 ### Fazer push das mudanças mescladas para o repositório remoto
 ``` bash
 git push origin PreMerge
-```
