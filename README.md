@@ -8,16 +8,15 @@ DivideJá é uma plataforma que facilita a divisão de contas entre amigos, de a
 - Backend: Node.js, Express, Mysql
 - Banco de Dados: Mysql 
 
-### Funcionalidades Principais
-- Cadastro e Autenticação de Usuários
+### Funcionalidades Principais (empresa)
+- Cadastro e Autenticação de Funcionários
  
-- Registro e login de usuários
-- Autenticação via redes sociais (opcional)
-- Criação de Eventos
+- Registro e login de Funcionários
+- Criação de Mesas
  
-- Usuários podem criar eventos onde as contas serão divididas
-- Adição de participantes ao evento
-- Adição de Despesas
+- Funcionários podem escolher como as contas serão divididas (igualmente ou por pessoa)
+- Adição de participantes a mesa
+- Adição de taxa de serviço
  
 - Inserção de despesas com descrição, valor e quem consumiu
 - Suporte para diferentes categorias de despesas

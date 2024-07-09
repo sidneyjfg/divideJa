@@ -1,0 +1,8 @@
+/* Container.css */
+.container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f8f8f8;
+    height: 100vh;
+}
