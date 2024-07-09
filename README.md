@@ -112,3 +112,5 @@ git merge updatesSidney
 ``` bash
 git push origin PreMerge
 ```
+
+_Em seguida o proprietário irá atuar nas PR organizando-as conforme necessário._
