@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './LateralBar.css';
 import profilePic from '../assets/images/profile.png';
 
@@ -7,7 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUsers, faPlus, faHistory, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const LateralBar = () => {
-    const [activeItem, setActiveItem] = useState('inicio');
+    const location = useLocation();
+    const [activeItem, setActiveItem] = useState(location.pathname);
 
     const handleItemClick = (item) => {
         setActiveItem(item);
@@ -23,49 +25,49 @@ const LateralBar = () => {
             <nav className="menu">
                 <ul>
                     <li>
-                        <a
-                            href="/"
-                            className={activeItem === 'inicio' ? 'active' : ''}
-                            onClick={() => handleItemClick('inicio')}
+                        <Link
+                            to="/"
+                            className={activeItem === '/' ? 'active' : ''}
+                            onClick={() => handleItemClick('/')}
                         >
                             <FontAwesomeIcon icon={faHome} className="menu-icon" /> INÍCIO
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="amigos"
-                            className={activeItem === 'amigos' ? 'active' : ''}
-                            onClick={() => handleItemClick('amigos')}
+                        <Link
+                            to="/amigos"
+                            className={activeItem === '/amigos' ? 'active' : ''}
+                            onClick={() => handleItemClick('/amigos')}
                         >
                             <FontAwesomeIcon icon={faUsers} className="menu-icon" /> AMIGOS
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="create-table"
-                            className={activeItem === 'create-table' ? 'active' : ''}
-                            onClick={() => handleItemClick('create-table')}
+                        <Link
+                            to="/create-table"
+                            className={activeItem === '/create-table' ? 'active' : ''}
+                            onClick={() => handleItemClick('/create-table')}
                         >
                             <FontAwesomeIcon icon={faPlus} className="menu-icon" /> CRIAR NOVA MESA
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="historico"
-                            className={activeItem === 'historico' ? 'active' : ''}
-                            onClick={() => handleItemClick('historico')}
+                        <Link
+                            to="/historico"
+                            className={activeItem === '/historico' ? 'active' : ''}
+                            onClick={() => handleItemClick('/historico')}
                         >
                             <FontAwesomeIcon icon={faHistory} className="menu-icon" /> HISTÓRICO
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="configuracoes"
-                            className={activeItem === 'configuracoes' ? 'active' : ''}
-                            onClick={() => handleItemClick('configuracoes')}
+                        <Link
+                            to="/configuracoes"
+                            className={activeItem === '/configuracoes' ? 'active' : ''}
+                            onClick={() => handleItemClick('/configuracoes')}
                         >
                             <FontAwesomeIcon icon={faCog} className="menu-icon" /> CONFIGURAÇÕES
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </nav>
@@ -74,6 +76,6 @@ const LateralBar = () => {
             </button>
         </div>
     );
-}
+};
 
 export default LateralBar;
