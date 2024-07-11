@@ -5,7 +5,7 @@ import profilePic from '../assets/images/profile.png';
 
 // Importações do Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUsers, faPlus, faHistory, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faPlus, faHistory, faCog, faSignOutAlt, faKitchenSet,} from '@fortawesome/free-solid-svg-icons';
 
 const LateralBar = () => {
     const location = useLocation();
@@ -35,11 +35,11 @@ const LateralBar = () => {
                     </li>
                     <li>
                         <Link
-                            to="/amigos"
-                            className={activeItem === '/amigos' ? 'active' : ''}
-                            onClick={() => handleItemClick('/amigos')}
+                            to="/kitchen-page"
+                            className={activeItem === '/kitchen' ? 'active' : ''}
+                            onClick={() => handleItemClick('/kitchen')}
                         >
-                            <FontAwesomeIcon icon={faUsers} className="menu-icon" /> AMIGOS
+                            <FontAwesomeIcon icon={faKitchenSet} className="menu-icon" /> COZINHA
                         </Link>
                     </li>
                     <li>

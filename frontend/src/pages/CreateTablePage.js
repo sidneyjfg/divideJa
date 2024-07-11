@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './CreateTablePage.css';
 import Modal from '../components/Modal';
-
 const CreateTablePage = () => {
     const [tables, setTables] = useState([
         { tableNumber: '1', clients: ['João', 'Maria', 'Carlos', 'Ana'], status: 'available' },

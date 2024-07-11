@@ -1,0 +1,76 @@
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px; 
+    margin: 2rem;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2rem; 
+    background-color: #ff9800;
+    border-radius: 10px 10px 0 0;
+    color: white;
+  }
+  
+  .badge {
+    font-size: 1rem; 
+  }
+  
+  .order-number {
+    font-weight: bold;
+  }
+  
+  .order-id {
+    background-color: #f57c00;
+    padding: 0.3rem 0.6rem; 
+    border-radius: 5px;
+  }
+  
+  .content {
+    padding: 1.2rem; 
+  }
+  
+  .order-item {
+    font-size: 1.2rem; 
+    margin: 0;
+  }
+  
+  .order-extra {
+    font-size: 1rem; 
+    color: #888;
+  }
+  
+  .order-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.2rem; 
+    font-size: 1rem; 
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.2rem; 
+  }
+  
+  .btn {
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem; 
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .ready {
+    background-color: #ffb74d;
+  }
+  
+  .delivered {
+    background-color: #ffa726;
+  }
+  

@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import CreateTablePage from './pages/CreateTablePage';
 import ManageOrdersPage from './pages/ManageOrdersPage';
 import './index.css';
+import KitchenPage from './pages/KitchenPage';
 
 // Define a estrutura principal do aplicativo
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/create-table" element={<CreateTablePage />} />
                     <Route path="/manage-orders" element={<ManageOrdersPage />} />
+                    <Route path="/kitchen-page" element={<KitchenPage />} />
                 </Routes>
             </Container>
         </div>
