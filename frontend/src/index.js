@@ -6,6 +6,7 @@ import Container from './components/Container';
 import HomePage from './pages/HomePage';
 import CreateTablePage from './pages/CreateTablePage';
 import ManageOrdersPage from './pages/ManageOrdersPage';
+
 import './index.css';
 
 // Define a estrutura principal do aplicativo

@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Modal.css';
 
 const Modal = ({ table, onClose, onSave }) => {
     const [tableNumber, setTableNumber] = useState(table.tableNumber);
-    const [numberOfPeople, setNumberOfPeople] = useState(table.numberOfPeople);
     const [clientNames, setClientNames] = useState(table.clients);
     const [status, setStatus] = useState(table.status);
+    const [numberOfPeople, setNumberOfPeople] = useState(clientNames.length);
+
+    useEffect(() => {
+        setNumberOfPeople(clientNames.length);
+    }, [clientNames]);
 
     const handleClientNameChange = (index, value) => {
         const newClientNames = [...clientNames];
@@ -25,7 +29,7 @@ const Modal = ({ table, onClose, onSave }) => {
         e.preventDefault();
         const updatedTable = {
             tableNumber,
-            numberOfPeople,
+            numberOfPeople: clientNames.length,
             clients: clientNames.filter(name => name !== ''),
             status
         };
@@ -47,13 +51,7 @@ const Modal = ({ table, onClose, onSave }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Número de Pessoas:</label>
-                        <input
-                            type="number"
-                            value={numberOfPeople}
-                            onChange={(e) => setNumberOfPeople(e.target.value)}
-                            required
-                        />
+                        <label>Número de Pessoas: {numberOfPeople}</label>
                     </div>
                     <div className="form-group">
                         <label>Nomes dos Clientes:</label>

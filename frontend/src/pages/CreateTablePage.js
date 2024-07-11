@@ -6,11 +6,8 @@ const CreateTablePage = () => {
     const [tables, setTables] = useState([
         { tableNumber: '1', clients: ['João', 'Maria', 'Carlos', 'Ana'], status: 'available' },
         { tableNumber: '2', clients: ['Pedro', 'Paula', 'Fernanda'], status: 'unavailable' }
-    ].map(table => ({
-        ...table,
-        numberOfPeople: table.clients.length.toString()
-    })));
-    const [activeTable, setActiveTable] = useState(null);
+    ]);
+    const [activeTableIndex, setActiveTableIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTable, setCurrentTable] = useState(null);
 
@@ -19,7 +16,7 @@ const CreateTablePage = () => {
     };
 
     const handleTableClick = (index) => {
-        setActiveTable(activeTable === index ? null : index);
+        setActiveTableIndex(activeTableIndex === index ? null : index);
     };
 
     const handleEditClick = (table) => {
@@ -40,7 +37,7 @@ const CreateTablePage = () => {
                     <TableCard
                         key={index}
                         table={table}
-                        isActive={activeTable === index}
+                        isActive={activeTableIndex === index}
                         onClick={() => handleTableClick(index)}
                         onEdit={() => handleEditClick(table)}
                     />
@@ -64,7 +61,7 @@ const TableCard = ({ table, isActive, onClick, onEdit }) => {
             </div>
             {isActive && (
                 <div className="table-details">
-                    <p>Número de Pessoas: {table.numberOfPeople}</p>
+                    <p>Número de Pessoas: {table.clients.length}</p>
                     <ul>
                         {table.clients.map((client, i) => (
                             <li key={i}>{client}</li>
@@ -106,7 +103,6 @@ const CreateTableForm = ({ addTable }) => {
         e.preventDefault();
         const newTable = {
             tableNumber,
-            numberOfPeople: clientNames.filter(name => name !== '').length.toString(),
             clients: clientNames.filter(name => name !== ''),
             status
         };
