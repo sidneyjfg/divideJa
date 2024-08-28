@@ -57,7 +57,7 @@ const TableCard = ({ table, isActive, onClick, onEdit }) => {
             <div className="table-header">
                 <h2>Mesa {table.tableNumber}</h2>
                 <span className={`status ${table.status}`}></span>
-                <span className={`arrow ${isActive ? 'down' : 'right'}`}>&#9660;</span>
+                <span className={`arrow ${isActive ? 'right' : 'down'}`}>&#9660;</span>
             </div>
             {isActive && (
                 <div className="table-details">
