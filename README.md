@@ -54,10 +54,24 @@ my-fullstack-app/
 │   │   ├── api/
 │   │   │   └── axios.js
 │   │   ├── components/
-│   │   │   └── OrderItem.js
+│   │   │   └── Container.css
+│   │   │   └── Container.js
+│   │   │   └── LateralBar.css
+│   │   │   └── LateralBar.js
+│   │   │   └── Modal.css
+│   │   │   └── Modal.js
+│   │   │   └── Settings.css
+│   │   │   └── Settings.js
 │   │   ├── pages/
-│   │   │   └── Home.js
-│   │   ├── App.js
+│   │   │   └── CreateTablePage.css
+│   │   │   └── CreateTablePage.js
+│   │   │   └── FriendsPage.css
+│   │   │   └── FriendsPage.js
+│   │   │   └── HomePage.css
+│   │   │   └── HomePage.js
+│   │   │   └── ManageOrdersPage.css
+│   │   │   └── ManageOrdersPage.js
+│   │   ├── index.css
 │   │   ├── index.js
 │   ├── .env
 │   ├── package.json
@@ -66,6 +80,43 @@ my-fullstack-app/
 └── package.json
 
 ```
+# Histórias de Usuários
+
+## 1. Garçom Gerenciando Mesas
+- [ ] Como um Garçom, quero visualizar a lista de mesas no restaurante com seus respectivos números e status (disponível, ocupada, etc.).
+- [ ] Como um Garçom, quero clicar em uma mesa para ver os detalhes dos clientes presentes e seus pedidos.
+- [ ] Como um Garçom, quero adicionar novos clientes a uma mesa.
+- [ ] Como um Garçom, quero adicionar pedidos para cada cliente individualmente em uma mesa.
+- [ ] Como um Garçom, quero editar ou remover pedidos de clientes, caso necessário.
+- [ ] Como um Garçom, quero limpar uma mesa (remover todos os clientes e pedidos) após o pagamento ser concluído.
+
+## 2. Cozinheiro Recebendo Pedidos
+- [ ] Como um Cozinheiro, quero receber uma lista de pedidos pendentes organizados por mesa.
+- [ ] Como um Cozinheiro, quero ver detalhes dos pedidos, incluindo o nome do cliente e o que foi pedido.
+- [ ] Como um Cozinheiro, quero marcar um pedido como "em preparo" ou "pronto".
+- [ ] Como um Cozinheiro, quero filtrar pedidos por status (pendente, em preparo, pronto).
+
+## 3. Caixa Processando Pagamentos
+- [ ] Como um Caixa, quero selecionar uma mesa para ver a lista de clientes e seus pedidos.
+- [ ] Como um Caixa, quero calcular o total a ser pago por cada cliente individualmente.
+- [ ] Como um Caixa, quero dividir a conta entre os clientes com base no que cada um consumiu.
+- [ ] Como um Caixa, quero processar o pagamento para clientes individuais ou para toda a mesa.
+- [ ] Como um Caixa, quero marcar a mesa como "disponível" após o pagamento ser concluído.
+
+## 4. Gerente Monitorando o Restaurante
+- [ ] Como um Gerente, quero visualizar o status de todas as mesas e seus pedidos em tempo real.
+- [ ] Como um Gerente, quero visualizar relatórios diários de vendas, incluindo total por mesa e por cliente.
+- [ ] Como um Gerente, quero adicionar ou remover mesas do sistema.
+- [ ] Como um Gerente, quero criar novos usuários (cozinheiro, caixa, garçom) e definir suas permissões.
+- [ ] Como um Gerente, quero editar informações de mesas e usuários.
+
+## 5. Cliente Fazendo Pedido
+- [ ] Como um Cliente, quero consultar o cardápio através de um dispositivo (tablet ou celular fornecido pelo restaurante).
+- [ ] Como um Cliente, quero fazer pedidos diretamente de um dispositivo na mesa.
+- [ ] Como um Cliente, quero ver uma lista dos meus pedidos pendentes.
+- [ ] Como um Cliente, quero solicitar a conta e escolher se quero pagar individualmente ou dividir a conta com outros clientes na mesa.
+
+
 
 Como trabalhar com as branchs 
 
