@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// src/components/LateralBar.js
+
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './LateralBar.css';
 import profilePic from '../assets/images/profile.png';
@@ -7,9 +9,14 @@ import profilePic from '../assets/images/profile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUsers, faPlus, faHistory, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-const LateralBar = () => {
+const LateralBar = ({ onLogout }) => {
     const location = useLocation();
-    const [activeItem, setActiveItem] = useState(location.pathname);
+    const [activeItem, setActiveItem] = useState('/'); // Define o item inicial como HomePage
+
+    // Usa o efeito para ajustar o item ativo com base na rota atual
+    useEffect(() => {
+        setActiveItem(location.pathname);
+    }, [location]);
 
     const handleItemClick = (item) => {
         setActiveItem(item);
@@ -71,7 +78,7 @@ const LateralBar = () => {
                     </li>
                 </ul>
             </nav>
-            <button className="logout-button">
+            <button className="logout-button" onClick={onLogout}>
                 <FontAwesomeIcon icon={faSignOutAlt} className="menu-icon" /> SAIR
             </button>
         </div>

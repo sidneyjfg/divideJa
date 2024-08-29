@@ -35,7 +35,7 @@ DivideJá é uma plataforma que facilita a divisão de contas entre amigos, de a
 
 ## Estrutura do projeto
 ``` bash
-my-fullstack-app/
+divideJa/
 ├── backend/
 │   ├── config/
 │   │   └── db.js

@@ -22,11 +22,11 @@ const Settings = () => {
       {/* Renderiza os botões ou o formulário com base na seção ativa */}
       {activeSection === null && (
         <div className="buttonGroup">
-          <button className="button" onClick={() => handleButtonClick('username')}>Alterar Nome de Usuário</button>
-          <button className="button" onClick={() => handleButtonClick('password')}>Alterar Senha</button>
-          <button className="button" onClick={() => handleButtonClick('photo')}>Alterar Foto de Perfil</button>
-          <button className="button" onClick={() => alert('Ajuda clicada!')}>Ajuda</button>
-          <button className="button" onClick={() => alert('Termos de Privacidade clicados!')}>Termos de Privacidade</button>
+          <button className="buttonSettings" onClick={() => handleButtonClick('username')}>Alterar Nome de Usuário</button>
+          <button className="buttonSettings" onClick={() => handleButtonClick('password')}>Alterar Senha</button>
+          <button className="buttonSettings" onClick={() => handleButtonClick('photo')}>Alterar Foto de Perfil</button>
+          <button className="buttonSettings" onClick={() => alert('Ajuda clicada!')}>Ajuda</button>
+          <button className="buttonSettings" onClick={() => alert('Termos de Privacidade clicados!')}>Termos de Privacidade</button>
         </div>
       )}
 
@@ -37,7 +37,7 @@ const Settings = () => {
             <label className="label">Novo Nome de Usuário:</label>
             <input type="text" className="input" />
           </div>
-          <button type="submit" className="button">Salvar Alterações</button>
+          <button type="submit" className="buttonSettings">Salvar Alterações</button>
         </form>
       )}
 
@@ -48,7 +48,7 @@ const Settings = () => {
             <label className="label">Nova Senha:</label>
             <input type="password" className="input" />
           </div>
-          <button type="submit" className="button">Salvar Alterações</button>
+          <button type="submit" className="buttonSettings">Salvar Alterações</button>
         </form>
       )}
 
@@ -59,7 +59,7 @@ const Settings = () => {
             <label className="label">Nova Foto de Perfil:</label>
             <input type="file" className="input" />
           </div>
-          <button type="submit" className="button">Salvar Alterações</button>
+          <button type="submit" className="buttonSettings">Salvar Alterações</button>
         </form>
       )}
     </div>
