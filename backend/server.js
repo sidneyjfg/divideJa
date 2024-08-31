@@ -1,8 +1,5 @@
-// backend/server.js
-
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
@@ -13,12 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // MySQL connection
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
-});
+const connection = require('./config/db'); // Importa a conexão de 'db.js'
 
 connection.connect((err) => {
     if (err) {
@@ -28,11 +20,25 @@ connection.connect((err) => {
     console.log('Conectado ao banco de dados MySQL');
 });
 
+// Importar e usar rotas de usuários
+const userRoutes = require('./routes/users');
+app.use('/api', userRoutes);
+
+const tableRoutes = require('./routes/tables');
+app.use('/api', tableRoutes);
+
+const orderRoutes = require('./routes/orders');
+app.use('/api', orderRoutes);
+
+const clientsRoutes = require('./routes/clients'); 
+app.use('/api', clientsRoutes);
+
 // Rota para autenticação de login
 app.post('/api/login', (req, res) => {
-    const { username, password } = req.body; // Certifique-se de que os campos do Postman sejam consistentes
+    const { username, password } = req.body;
+    console.log('Tentativa de login:', { username, password });
 
-    const sql = 'SELECT * FROM users WHERE login = ?'; // Usando a tabela 'users' e campo 'login'
+    const sql = 'SELECT * FROM users WHERE login = ?';
     connection.query(sql, [username], (err, results) => {
         if (err) {
             console.error('Erro na consulta SQL:', err);
@@ -44,6 +50,7 @@ app.post('/api/login', (req, res) => {
         }
 
         const user = results[0];
+        console.log('Usuário encontrado:', user);
 
         // Comparar a senha digitada com a senha armazenada no banco de dados
         bcrypt.compare(password, user.senha, (err, isMatch) => {
@@ -61,7 +68,7 @@ app.post('/api/login', (req, res) => {
                 expiresIn: '1h'
             });
 
-            console.log('Login bem-sucedido, token gerado');
+            console.log('Login bem-sucedido, token gerado:', token);
             res.json({ token, user: { id: user.id, nome: user.nome, funcao: user.funcao } });
         });
     });
