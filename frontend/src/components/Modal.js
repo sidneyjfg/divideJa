@@ -4,29 +4,54 @@ import api from '../api/axios';
 
 const Modal = ({ table, onClose, onSave }) => {
     const [tableNumber, setTableNumber] = useState(table.tableNumber);
-    const [clientNames, setClientNames] = useState(table.clients.map(client => client.name));
-    const [numberOfPeople, setNumberOfPeople] = useState(clientNames.length);
+    const [clients, setClients] = useState(table.clients); // Altere para armazenar objetos de clientes completos
+    const [numberOfPeople, setNumberOfPeople] = useState(clients.length);
     const [currentClientIndex, setCurrentClientIndex] = useState(null);
     const [newOrder, setNewOrder] = useState({ descricao: '', quantidade: 1, preco: 0 });
     const [orders, setOrders] = useState({});
     const [notification, setNotification] = useState('');
+    const [clientsToRemove] = useState([]); // Lista de IDs de clientes a serem removidos
 
     useEffect(() => {
-        setNumberOfPeople(clientNames.length);
-    }, [clientNames]);
+        setNumberOfPeople(clients.length);
+    }, [clients]);
 
     const handleClientNameChange = (index, value) => {
-        const newClientNames = [...clientNames];
-        newClientNames[index] = value;
-        setClientNames(newClientNames);
+        const updatedClients = [...clients];
+        updatedClients[index].name = value;
+        setClients(updatedClients);
     };
 
-    const handleRemoveClient = (index) => {
-        setClientNames(clientNames.filter((_, i) => i !== index));
+    const handleRemoveClient = async (index) => {
+        const clientToRemove = clients[index];
+        console.log("Cliente a ser removido: ", clientToRemove)
+        try {
+            // Obter o ID do cliente com base no nome
+            const clientResponse = await api.get(`/clients/name/${clientToRemove.name}`);
+            console.log("Resposta recebida pelo backEnd Remove: ", clientResponse.data);
+            if (clientResponse.data && clientResponse.data.length > 0) {
+                const clientId = clientResponse.data[0].id;
+                console.log("Id do cliente encontrado: ",clientId);
+                // Fazer uma chamada de API para remover o cliente do banco de dados
+                await api.delete(`/clients/${clientId}`);
+                setNotification(`Cliente ${clientToRemove.name} removido com sucesso.`);
+            } else {
+                setNotification(`Cliente ${clientToRemove.name} não encontrado no banco de dados.`);
+            }
+    
+            // Remover o cliente da lista localmente
+            setClients(clients.filter((_, i) => i !== index));
+        } catch (error) {
+            console.error('Erro ao remover cliente:', error);
+            setNotification('Erro ao remover cliente!');
+        }
+    
+        setTimeout(() => setNotification(''), 3000);
     };
+    
 
     const handleAddClient = () => {
-        setClientNames([...clientNames, '']);
+        setClients([...clients, { name: '', phone: '', email: '' }]);
     };
 
     const handleAddOrderClick = (index) => {
@@ -39,7 +64,7 @@ const Modal = ({ table, onClose, onSave }) => {
 
     const handleAddOrder = () => {
         if (currentClientIndex !== null) {
-            const clientName = clientNames[currentClientIndex];
+            const clientName = clients[currentClientIndex].name;
             const updatedOrders = { ...orders };
             
             if (!updatedOrders[clientName]) {
@@ -47,8 +72,8 @@ const Modal = ({ table, onClose, onSave }) => {
             }
             updatedOrders[clientName].push({ ...newOrder });
 
-            setOrders(updatedOrders);
-            setNewOrder({ descricao: '', quantidade: 1, preco: 0 });
+            setOrders(updatedOrders); // Atualiza o estado dos pedidos
+            setNewOrder({ descricao: '', quantidade: 1, preco: 0 }); // Reseta o formulário do pedido
             setNotification(`Pedido adicionado para ${clientName}`);
             setTimeout(() => setNotification(''), 3000);
         }
@@ -60,29 +85,34 @@ const Modal = ({ table, onClose, onSave }) => {
         try {
             const updatedTable = {
                 tableNumber,
-                numberOfPeople: clientNames.length,
-                clients: clientNames.map(name => ({ name })),
+                numberOfPeople: clients.length,
+                clients,
                 orders,
-                status: clientNames.length > 0 ? 'unavailable' : 'available'
+                status: clients.length > 0 ? 'unavailable' : 'available'
             };
 
+            // Executa as exclusões de clientes, se houver
+            for (const clientId of clientsToRemove) {
+                await api.delete(`/clients/${clientId}`);
+            }
+
             // Salvar/Atualizar clientes e pedidos
-            for (const clientName of clientNames) {
+            for (const client of clients) {
                 let clientId;
-                const clientResponse = await api.get(`/clients/name/${clientName}`);
+                const clientResponse = await api.get(`/clients/name/${client.name}`);
                 if (clientResponse.data && clientResponse.data.length > 0) {
                     clientId = clientResponse.data[0].id;
                 } else {
                     const newClientResponse = await api.post('/clients', {
-                        name: clientName,
-                        phone: '', // Enviar como null se necessário
-                        email: '',
+                        name: client.name,
+                        phone: client.phone || null,
+                        email: client.email || null,
                         tableNumber
                     });
                     clientId = newClientResponse.data.id;
                 }
 
-                const clientOrders = orders[clientName] || [];
+                const clientOrders = orders[client.name] || [];
                 for (const order of clientOrders) {
                     await api.post('/orders', {
                         ...order,
@@ -126,11 +156,11 @@ const Modal = ({ table, onClose, onSave }) => {
                     </div>
                     <div className="form-group">
                         <label>Nomes dos Clientes:</label>
-                        {clientNames.map((name, index) => (
+                        {clients.map((client, index) => (
                             <div key={index} className="client-name">
                                 <input
                                     type="text"
-                                    value={name}
+                                    value={client.name}
                                     onChange={(e) => handleClientNameChange(index, e.target.value)}
                                     placeholder={`Cliente ${index + 1}`}
                                 />
@@ -142,7 +172,7 @@ const Modal = ({ table, onClose, onSave }) => {
                     </div>
                     {currentClientIndex !== null && (
                         <div className="order-form">
-                            <h3>Adicionar Pedido para {clientNames[currentClientIndex]}</h3>
+                            <h3>Adicionar Pedido para {clients[currentClientIndex].name}</h3>
                             <div className="form-group">
                                 <label>Descrição do Pedido:</label>
                                 <input

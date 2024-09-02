@@ -1,58 +1,40 @@
 // backend/routes/clients.js
+
 const express = require('express');
 const router = express.Router();
 const connection = require('../config/db');
 
-// Endpoint para verificar se um cliente já existe
-router.get('/clients', (req, res) => {
-    const { name } = req.query;
-    const sql = 'SELECT * FROM clients WHERE nome = ?';
-    connection.query(sql, [name], (err, results) => {
-        if (err) {
-            console.error('Erro ao verificar cliente:', err);
-            return res.status(500).json({ message: 'Erro no servidor ao verificar cliente' });
-        }
-        res.json(results);
-    });
-});
+// Endpoint para buscar cliente por nome
 router.get('/clients/name/:name', (req, res) => {
     const { name } = req.params;
     const sql = 'SELECT * FROM clients WHERE nome = ?';
     connection.query(sql, [name], (err, results) => {
         if (err) {
             console.error('Erro ao buscar cliente:', err);
-            return res.status(500).json({ message: 'Erro no servidor' });
+            return res.status(500).json({ message: 'Erro ao buscar cliente' });
         }
-        if (results.length > 0) {
-            res.json(results[0]);
-        } else {
-            res.json(null);
-        }
+        console.log("Clientes encontraods: ",results)
+        res.json(results);
+        
     });
 });
 
 // Endpoint para criar um novo cliente
 router.post('/clients', (req, res) => {
     const { name, phone, email, tableNumber } = req.body;
-
     const sqlInsertClient = 'INSERT INTO clients (nome, telefone, email, tableId) VALUES (?, ?, ?, ?)';
-    
+
     // Primeiro, encontre o ID da mesa com base no número da mesa fornecido
     const findTableSql = 'SELECT id FROM tables WHERE numero = ?';
     connection.query(findTableSql, [tableNumber], (err, tableResult) => {
-        if (err) {
-            console.error('Erro ao buscar a mesa:', err);
-            return res.status(500).json({ message: 'Erro ao buscar a mesa' });
+        if (err || tableResult.length === 0) {
+            console.error('Erro ao encontrar a mesa:', err);
+            return res.status(500).json({ message: 'Erro ao encontrar a mesa' });
         }
         
-        if (tableResult.length === 0) {
-            console.error('Mesa não encontrada com o número:', tableNumber);
-            return res.status(404).json({ message: 'Mesa não encontrada' });
-        }
-
         const tableId = tableResult[0].id;
 
-        connection.query(sqlInsertClient, [name, phone, email, tableId], (err, result) => {
+        connection.query(sqlInsertClient, [name, phone || null, email || null, tableId], (err, result) => {
             if (err) {
                 console.error('Erro ao criar cliente:', err);
                 return res.status(500).json({ message: 'Erro no servidor ao criar cliente' });
@@ -62,18 +44,20 @@ router.post('/clients', (req, res) => {
     });
 });
 
+// Rota para deletar um cliente
+router.delete('/clients/:id', (req, res) => {
+    const clientId = req.params.id;
+    const sqlDeleteClient = 'DELETE FROM clients WHERE id = ?';
 
-router.post('/orders', (req, res) => {
-    const { descricao, quantidade, preco, clientId } = req.body;
-    const sqlInsertOrder = 'INSERT INTO itens_pedido (descricao, quantidade, preco, clientId) VALUES (?, ?, ?, ?)';
-    
-    connection.query(sqlInsertOrder, [descricao, quantidade, preco, clientId], (err, result) => {
+    connection.query(sqlDeleteClient, [clientId], (err, result) => {
         if (err) {
-            console.error('Erro ao adicionar pedido:', err);
-            return res.status(500).json({ message: 'Erro no servidor ao adicionar pedido' });
+            console.error('Erro ao deletar cliente:', err);
+            return res.status(500).json({ message: 'Erro no servidor ao deletar cliente' });
         }
-        res.status(201).json({ id: result.insertId, descricao, quantidade, preco, clientId });
+
+        res.status(200).json({ message: 'Cliente deletado com sucesso' });
     });
 });
+
 
 module.exports = router;

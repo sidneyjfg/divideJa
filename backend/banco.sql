@@ -57,35 +57,9 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
 
 -- Inserir mesas de teste
 INSERT INTO tables (id, numero, status) VALUES
-(1, '1', 'unavailable'),
-(2, '2', 'unavailable'),
-(3, '3', 'available');
+(1, '1', 'available');
 
 -- Inserir clientes de teste associados às mesas com telefone e email
 INSERT INTO clients (nome, telefone, email, tableId) VALUES
 ('João', '123-456-7890', 'joao@example.com', 1),
-('Maria', '987-654-3210', 'maria@example.com', 1),
-('Carlos', '555-123-4567', 'carlos@example.com', 1),
-('Ana', '444-555-6666', 'ana@example.com', 1),
-('Pedro', '111-222-3333', 'pedro@example.com', 2),
-('Paula', '222-333-4444', 'paula@example.com', 2),
-('Fernanda', '333-444-5555', 'fernanda@example.com', 2);
-
--- Inserir usuários de teste
-INSERT INTO users (nome, funcao, login, senha, foto) VALUES
-('Sidney Junio', 'Administrador', 'admin', '$2a$10$hashedpassword', NULL),
-('João Cozinheiro', 'Cozinheiro', 'cozinheiro', '$2a$10$hashedpassword', NULL),
-('Maria Caixa', 'Caixa', 'caixa', '$2a$10$hashedpassword', NULL),
-('Carlos Garçom', 'Garçom', 'garcom', '$2a$10$hashedpassword', NULL);
-
--- Inserir pedidos de teste
-INSERT INTO pedidos (tableId, status) VALUES
-(1, 'pendente'),
-(2, 'finalizado');
-
--- Inserir itens de pedido de teste
-INSERT INTO itens_pedido (pedidoId, descricao, quantidade, preco) VALUES
-(1, 'Pizza Margherita', 2, 25.50),
-(1, 'Coca Cola', 1, 5.00),
-(2, 'Lasanha', 1, 30.00),
-(2, 'Suco de Laranja', 1, 7.00);
+('Maria', '987-654-3210', 'maria@example.com', 1);
