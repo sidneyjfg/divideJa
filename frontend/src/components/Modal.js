@@ -4,11 +4,11 @@ import api from '../api/axios';
 
 const Modal = ({ table, onClose, onSave }) => {
     const [tableNumber, setTableNumber] = useState(table.tableNumber);
-    const [clients, setClients] = useState(table.clients); // Altere para armazenar objetos de clientes completos
+    const [clients, setClients] = useState(table.clients); // Armazena objetos de clientes completos
     const [numberOfPeople, setNumberOfPeople] = useState(clients.length);
     const [currentClientIndex, setCurrentClientIndex] = useState(null);
     const [newOrder, setNewOrder] = useState({ descricao: '', quantidade: 1, preco: 0 });
-    const [orders, setOrders] = useState({});
+    const [orders] = useState({});
     const [notification, setNotification] = useState('');
     const [clientsToRemove] = useState([]); // Lista de IDs de clientes a serem removidos
 
@@ -24,59 +24,101 @@ const Modal = ({ table, onClose, onSave }) => {
 
     const handleRemoveClient = async (index) => {
         const clientToRemove = clients[index];
-        console.log("Cliente a ser removido: ", clientToRemove)
+        console.log("Cliente a ser removido: ", clientToRemove);
         try {
             // Obter o ID do cliente com base no nome
             const clientResponse = await api.get(`/clients/name/${clientToRemove.name}`);
             console.log("Resposta recebida pelo backEnd Remove: ", clientResponse.data);
             if (clientResponse.data && clientResponse.data.length > 0) {
                 const clientId = clientResponse.data[0].id;
-                console.log("Id do cliente encontrado: ",clientId);
+                console.log("Id do cliente encontrado: ", clientId);
                 // Fazer uma chamada de API para remover o cliente do banco de dados
                 await api.delete(`/clients/${clientId}`);
                 setNotification(`Cliente ${clientToRemove.name} removido com sucesso.`);
             } else {
                 setNotification(`Cliente ${clientToRemove.name} não encontrado no banco de dados.`);
             }
-    
+
             // Remover o cliente da lista localmente
             setClients(clients.filter((_, i) => i !== index));
         } catch (error) {
             console.error('Erro ao remover cliente:', error);
             setNotification('Erro ao remover cliente!');
         }
-    
+
         setTimeout(() => setNotification(''), 3000);
     };
-    
 
     const handleAddClient = () => {
         setClients([...clients, { name: '', phone: '', email: '' }]);
     };
 
-    const handleAddOrderClick = (index) => {
-        setCurrentClientIndex(index);
+    const handleAddOrderClick = async (index) => {
+        const clientOrder = clients[index];
+        console.log("clientOrder -> ", clientOrder.name);
+    
+        try {
+            // Verificar se o cliente existe no banco de dados
+            const clientResponse = await api.get(`/clients/name/${clientOrder.name}`);
+            console.log("clienteResponse: ", clientResponse);
+            
+            if (clientResponse.data && clientResponse.data.length > 0) {
+                // Cliente existe, então usamos o ID dele
+                const clientId = clientResponse.data[0].id;
+                setCurrentClientIndex(index); // Define o cliente atual pelo índice
+                console.log("ID do cliente encontrado e definido:", clientId);
+            } else {
+                // Adicionar cliente se não existir
+                const newClientResponse = await api.post('/clients', {
+                    name: clientOrder.name,
+                    phone: clientOrder.phone || null,
+                    email: clientOrder.email || null,
+                    tableNumber: tableNumber
+                });
+                const newClientId = newClientResponse.data.id;
+                setCurrentClientIndex(index); // Define o novo cliente pelo índice
+                console.log("Cliente adicionado e ID definido:", newClientId);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar ou adicionar cliente:', error);
+            setNotification('Erro ao buscar ou adicionar cliente!');
+            setTimeout(() => setNotification(''), 3000);
+        }
     };
 
     const handleOrderChange = (field, value) => {
         setNewOrder({ ...newOrder, [field]: value });
     };
 
-    const handleAddOrder = () => {
+    const handleAddOrder = async () => {
         if (currentClientIndex !== null) {
-            const clientName = clients[currentClientIndex].name;
-            const updatedOrders = { ...orders };
-            
-            if (!updatedOrders[clientName]) {
-                updatedOrders[clientName] = [];
+            try {
+                const client = clients[currentClientIndex];
+                const clientResponse = await api.get(`/clients/name/${client.name}`);
+                if (clientResponse.data && clientResponse.data.length > 0) {
+                    const clientId = clientResponse.data[0].id;
+    
+                    await api.post('/orders', {
+                        descricao: newOrder.descricao,
+                        quantidade: newOrder.quantidade,
+                        preco: newOrder.preco,
+                        clientId: clientId,
+                        tableId: table.id // Certifique-se de que `table.id` é passado corretamente
+                    });
+                    setNotification('Pedido adicionado com sucesso!');
+                    console.log('Pedido adicionado ao banco de dados');
+                } else {
+                    setNotification('Erro: Cliente não encontrado!');
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar pedido:', error);
+                setNotification('Erro ao adicionar pedido!');
             }
-            updatedOrders[clientName].push({ ...newOrder });
-
-            setOrders(updatedOrders); // Atualiza o estado dos pedidos
-            setNewOrder({ descricao: '', quantidade: 1, preco: 0 }); // Reseta o formulário do pedido
-            setNotification(`Pedido adicionado para ${clientName}`);
-            setTimeout(() => setNotification(''), 3000);
+        } else {
+            console.warn('Nenhum cliente selecionado para adicionar pedido');
         }
+        setNewOrder({ descricao: '', quantidade: 1, preco: 0 }); // Reseta o formulário do pedido
+        setTimeout(() => setNotification(''), 3000); // Limpa a notificação após 3 segundos
     };
 
     const handleSubmit = async (e) => {
@@ -172,7 +214,7 @@ const Modal = ({ table, onClose, onSave }) => {
                     </div>
                     {currentClientIndex !== null && (
                         <div className="order-form">
-                            <h3>Adicionar Pedido para {clients[currentClientIndex].name}</h3>
+                            <h3>Adicionar Pedido para {clients[currentClientIndex]?.name || 'Cliente'}</h3>
                             <div className="form-group">
                                 <label>Descrição do Pedido:</label>
                                 <input
