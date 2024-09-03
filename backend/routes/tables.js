@@ -71,6 +71,21 @@ router.post('/tables', (req, res) => {
     });
 });
 
+// Endpoint para excluir uma mesa
+router.delete('/tables/:id', (req, res) => {
+    const tableId = req.params.id;
+
+    const deleteTableSql = 'DELETE FROM tables WHERE id = ?';
+    connection.query(deleteTableSql, [tableId], (err, result) => {
+        if (err) {
+            console.error('Erro ao excluir mesa:', err);
+            return res.status(500).json({ message: 'Erro ao excluir mesa' });
+        }
+        res.status(200).json({ message: 'Mesa excluída com sucesso' });
+    });
+});
+
+
 router.put('/tables/:id', (req, res) => {
     const tableId = req.params.id;
     const { status, clients } = req.body;

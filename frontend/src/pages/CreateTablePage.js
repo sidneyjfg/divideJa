@@ -60,6 +60,36 @@ const CreateTablePage = () => {
         }
     };
 
+    // Função para adicionar uma nova mesa com o próximo número
+    const handleAddTable = async () => {
+        const maxTableNumber = tables.length > 0 
+            ? Math.max(...tables.map(table => table.tableNumber)) 
+            : 0;
+        
+        const newTableNumber = maxTableNumber + 1;
+
+        try {
+            const response = await api.post('/tables', {
+                tableNumber: newTableNumber,
+                status: 'available',
+                clients: []
+            });
+            setTables([...tables, response.data]);
+        } catch (error) {
+            console.error('Erro ao adicionar nova mesa:', error);
+        }
+    };
+
+    // Função para excluir uma mesa
+    const handleDeleteTable = async (tableId) => {
+        try {
+            await api.delete(`/tables/${tableId}`);
+            setTables(tables.filter(table => table.id !== tableId));
+        } catch (error) {
+            console.error('Erro ao excluir mesa:', error);
+        }
+    };
+
     return (
         <div className="create-table-page">
             <h1>Mesas Criadas</h1>
@@ -73,9 +103,13 @@ const CreateTablePage = () => {
                         onEdit={() => handleEditClick(table)}
                         onClear={() => handleClearTable(table.id)}
                         onClose={() => handleCloseTable(table.id)}
+                        onDelete={() => handleDeleteTable(table.id)}  // Adiciona a função de excluir mesa
                     />
                 ))}
             </div>
+
+            {/* Botão para adicionar uma nova mesa */}
+            <button className="add-table-button" onClick={handleAddTable}>+</button>
 
             {isModalOpen && (
                 <Modal table={currentTable} onClose={() => setIsModalOpen(false)} onSave={handleSaveTable} />
@@ -84,7 +118,7 @@ const CreateTablePage = () => {
     );
 };
 
-const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose }) => {
+const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelete }) => {
     return (
         <div className={`table-card ${isActive ? 'active' : ''}`} onClick={onClick}>
             <div className="table-header">
@@ -106,11 +140,11 @@ const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose }) => {
                         {table.clients.length > 0 && (
                             <button onClick={onClose}>Fechar Conta</button>
                         )}
+                        <button onClick={onDelete}>Excluir Mesa</button> {/* Botão para excluir a mesa */}
                     </div>
                 </div>
             )}
         </div>
-        
     );
 };
 
