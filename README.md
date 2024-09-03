@@ -83,10 +83,10 @@ divideJa/
 # Histórias de Usuários
 
 ## 1. Garçom Gerenciando Mesas
-- [ ] Como um Garçom, quero visualizar a lista de mesas no restaurante com seus respectivos números e status (disponível, ocupada, etc.).
-- [ ] Como um Garçom, quero clicar em uma mesa para ver os detalhes dos clientes presentes e seus pedidos.
-- [ ] Como um Garçom, quero adicionar novos clientes a uma mesa.
-- [ ] Como um Garçom, quero adicionar pedidos para cada cliente individualmente em uma mesa.
+- [✔] Como um Garçom, quero visualizar a lista de mesas no restaurante com seus respectivos números e status (disponível, ocupada, etc.).
+- [] Como um Garçom, quero clicar em uma mesa para ver os detalhes dos clientes presentes e seus pedidos.
+- [✔] Como um Garçom, quero adicionar novos clientes a uma mesa.
+- [✔] Como um Garçom, quero adicionar pedidos para cada cliente individualmente em uma mesa.
 - [ ] Como um Garçom, quero editar ou remover pedidos de clientes, caso necessário.
 - [ ] Como um Garçom, quero limpar uma mesa (remover todos os clientes e pedidos) após o pagamento ser concluído.
 
