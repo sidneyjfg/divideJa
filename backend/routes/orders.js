@@ -105,4 +105,25 @@ router.put('/orders/:orderId', (req, res) => {
     });
 });
 
+// Rota para enviar pedidos para a cozinha
+router.put('/orders/send-to-kitchen/:tableId', (req, res) => {
+    const { tableId } = req.params;
+
+    const sql = `
+        UPDATE orders 
+        SET status = 'enviado para cozinha'
+        WHERE tableId = ? AND status = 'pendente'
+    `;
+
+    connection.query(sql, [tableId], (err, results) => {
+        if (err) {
+            console.error('Erro ao enviar pedidos para a cozinha:', err);
+            return res.status(500).json({ message: 'Erro ao enviar pedidos' });
+        }
+
+        res.json({ message: 'Pedidos enviados para a cozinha com sucesso!' });
+    });
+});
+
+
 module.exports = router;

@@ -11,6 +11,8 @@ const CreateTablePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTable, setCurrentTable] = useState(null);
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false); // Estado para abrir a modal de pedidos
+    const [notification, setNotification] = useState('');
+
 
     // Função para buscar as mesas do servidor
     const fetchTables = async () => {
@@ -99,22 +101,37 @@ const CreateTablePage = () => {
         setIsOrderModalOpen(true); // Abre a modal de pedidos
     };
 
+    const handleSendToKitchen = async (tableId) => {
+        try {
+            await api.put(`/orders/send-to-kitchen/${tableId}`);
+            setNotification('Pedidos enviados para a cozinha com sucesso!');
+            setTimeout(() => setNotification(''), 3000); // Limpa a notificação após 3 segundos
+        } catch (error) {
+            console.error('Erro ao enviar pedidos para a cozinha:', error);
+            setNotification('Erro ao enviar pedidos para a cozinha.');
+        }
+    };
+    
+
     return (
         <div className="create-table-page">
             <h1>Mesas Criadas</h1>
+            {notification && <div className="notification">{notification}</div>}
             <div className="tables">
                 {tables.map((table) => (
-                    <TableCard
-                        key={table.id}
-                        table={table}
-                        isActive={activeTableId === table.id}
-                        onClick={() => setActiveTableId(activeTableId === table.id ? null : table.id)}
-                        onEdit={() => handleEditClick(table)}
-                        onClear={() => handleClearTable(table.id)}
-                        onClose={() => handleCloseTable(table.id)}
-                        onDelete={() => handleDeleteTable(table.id)}
-                        onViewOrders={() => handleViewOrders(table)} // Passa a função de visualização de pedidos
-                    />
+                   <TableCard
+                   key={table.id}
+                   table={table}
+                   isActive={activeTableId === table.id}
+                   onClick={() => setActiveTableId(activeTableId === table.id ? null : table.id)}
+                   onEdit={() => handleEditClick(table)}
+                   onClear={() => handleClearTable(table.id)}
+                   onClose={() => handleCloseTable(table.id)}
+                   onDelete={() => handleDeleteTable(table.id)}
+                   onViewOrders={() => handleViewOrders(table)}
+                   onSendToKitchen={handleSendToKitchen} // Passa a função para enviar pedidos para cozinha
+               />
+               
                 ))}
             </div>
 
@@ -131,7 +148,7 @@ const CreateTablePage = () => {
     );
 };
 
-const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelete, onViewOrders }) => {
+const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelete, onViewOrders, onSendToKitchen }) => {
     return (
         <div className={`table-card ${isActive ? 'active' : ''}`} onClick={onClick}>
             <div className="table-header">
@@ -163,6 +180,7 @@ const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelet
                             <button onClick={onClose}>Fechar Conta</button>
                         )}
                         <button onClick={onDelete}>Excluir Mesa</button>
+                        <button onClick={() => onSendToKitchen(table.id)}>Enviar para Cozinha</button> {/* Novo botão */}
                     </div>
                 </div>
             )}

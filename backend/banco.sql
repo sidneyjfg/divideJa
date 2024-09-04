@@ -1,65 +1,53 @@
 -- Excluir tabelas existentes para começar do zero (opcional, cuidado ao usar em produção)
 DROP TABLE IF EXISTS itens_pedido;
-DROP TABLE IF EXISTS pedidos;
+DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS clients;
 DROP TABLE IF EXISTS tables;
-DROP TABLE IF EXISTS users;
+--DROP TABLE IF EXISTS users;
 
--- Criar tabela de mesas
-CREATE TABLE IF NOT EXISTS tables (
+-- Tabela de Mesas
+CREATE TABLE tables (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    numero VARCHAR(10) NOT NULL,
-    status VARCHAR(20) DEFAULT 'available',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    numero INT NOT NULL, -- Alterado de 'tableNumber' para 'numero'
+    status ENUM('available', 'unavailable') DEFAULT 'available',
+    created_by INT,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Criar tabela de clientes
+-- Tabela de Clientes
 CREATE TABLE IF NOT EXISTS clients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    telefone VARCHAR(15),
+    telefone VARCHAR(20),
     email VARCHAR(100),
     tableId INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tableId) REFERENCES tables(id) ON DELETE CASCADE
 );
 
--- Criar tabela de usuários
-CREATE TABLE IF NOT EXISTS users (
+-- Tabela de Pedidos
+CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    funcao VARCHAR(50) NOT NULL,
-    login VARCHAR(50) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    foto VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Criar tabela de pedidos
-CREATE TABLE IF NOT EXISTS pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    clientId INT,
     tableId INT,
-    status VARCHAR(20) DEFAULT 'pendente',
+    status ENUM('pending', 'completed', 'canceled') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (clientId) REFERENCES clients(id) ON DELETE CASCADE,
     FOREIGN KEY (tableId) REFERENCES tables(id) ON DELETE CASCADE
 );
 
--- Criar tabela de itens de pedido
+-- Tabela de Itens de Pedido
 CREATE TABLE IF NOT EXISTS itens_pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    pedidoId INT,
     descricao VARCHAR(255) NOT NULL,
     quantidade INT NOT NULL,
     preco DECIMAL(10, 2) NOT NULL,
+    orderId INT,
+    clientId INT,
+    tableId INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pedidoId) REFERENCES pedidos(id) ON DELETE CASCADE
+    FOREIGN KEY (orderId) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (clientId) REFERENCES clients(id) ON DELETE CASCADE,
+    FOREIGN KEY (tableId) REFERENCES tables(id) ON DELETE CASCADE
 );
-
--- Inserir mesas de teste
-INSERT INTO tables (id, numero, status) VALUES
-(1, '1', 'available');
-
--- Inserir clientes de teste associados às mesas com telefone e email
-INSERT INTO clients (nome, telefone, email, tableId) VALUES
-('João', '123-456-7890', 'joao@example.com', 1),
-('Maria', '987-654-3210', 'maria@example.com', 1);

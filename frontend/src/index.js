@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage';
 import Settings from './components/Settings';
 import CreateTablePage from './pages/CreateTablePage';
 import ManageOrdersPage from './pages/ManageOrdersPage';
-import FriendsPage from './pages/FriendsPage';
+import KitchenPage from './pages/KitchenPage';
 import LoginPage from './pages/LoginPage'; // Importe a página de login
 import './index.css';
 
@@ -56,8 +56,8 @@ const App = () => {
                             element={isAuthenticated ? <Settings /> : <Navigate to="/login" />}
                         />
                         <Route
-                            path="/amigos"
-                            element={isAuthenticated ? <FriendsPage /> : <Navigate to="/login" />}
+                            path="/cozinha"
+                            element={isAuthenticated ? <KitchenPage /> : <Navigate to="/login" />}
                         />
                     </Routes>
                 </Container>

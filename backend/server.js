@@ -73,6 +73,20 @@ app.post('/api/login', (req, res) => {
         });
     });
 });
+app.put('/api/tables/send-to-kitchen/:id', (req, res) => {
+    const tableId = req.params.id;
+    
+    // Atualiza o status dos pedidos para 'enviado para cozinha'
+    const sql = 'UPDATE orders SET status = ? WHERE tableId = ?';
+    connection.query(sql, ['enviado para cozinha', tableId], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar status dos pedidos:', err);
+            return res.status(500).json({ message: 'Erro ao enviar pedidos para a cozinha' });
+        }
+        res.json({ message: 'Pedidos enviados para a cozinha com sucesso!' });
+    });
+});
+
 
 // Porta de escuta do servidor
 const PORT = process.env.PORT || 5000;

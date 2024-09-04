@@ -65,8 +65,8 @@ divideJa/
 │   │   ├── pages/
 │   │   │   └── CreateTablePage.css
 │   │   │   └── CreateTablePage.js
-│   │   │   └── FriendsPage.css
-│   │   │   └── FriendsPage.js
+│   │   │   └── KitchensPage.css
+│   │   │   └── KitchensPage.js
 │   │   │   └── HomePage.css
 │   │   │   └── HomePage.js
 │   │   │   └── ManageOrdersPage.css

@@ -64,11 +64,11 @@ const LateralBar = ({ onLogout }) => {
                     </li>
                     <li>
                         <Link
-                            to="/amigos"
-                            className={activeItem === '/amigos' ? 'active' : ''}
-                            onClick={() => handleItemClick('/amigos')}
+                            to="/cozinha"
+                            className={activeItem === '/cozinha' ? 'active' : ''}
+                            onClick={() => handleItemClick('/cozinha')}
                         >
-                            <FontAwesomeIcon icon={faUsers} className="menu-icon" /> AMIGOS
+                            <FontAwesomeIcon icon={faUsers} className="menu-icon" /> COZINHA
                         </Link>
                     </li>
                     <li>
