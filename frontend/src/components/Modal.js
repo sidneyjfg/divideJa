@@ -245,8 +245,10 @@ const Modal = ({ table, onClose, onSave }) => {
                             <button type="button" onClick={handleAddOrder}>Adicionar Pedido</button>
                         </div>
                     )}
-                    <button type="submit">Salvar Alterações</button>
-                    <button type="button" onClick={onClose}>Cancelar</button>
+                    <div className="modal-buttons">
+                        <button type="submit">Salvar Alterações</button>
+                        <button type="button" onClick={onClose}>Cancelar</button>
+                    </div>
                 </form>
             </div>
         </div>

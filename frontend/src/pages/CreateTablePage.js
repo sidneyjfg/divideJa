@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './CreateTablePage.css';
+import { FaClipboardList } from 'react-icons/fa'; // Ícone de pedido
 import Modal from '../components/Modal';
+import OrderModal from '../components/OrderModal'; // Nova modal para pedidos
 import api from '../api/axios';
 
 const CreateTablePage = () => {
@@ -8,6 +10,7 @@ const CreateTablePage = () => {
     const [activeTableId, setActiveTableId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTable, setCurrentTable] = useState(null);
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false); // Estado para abrir a modal de pedidos
 
     // Função para buscar as mesas do servidor
     const fetchTables = async () => {
@@ -90,6 +93,12 @@ const CreateTablePage = () => {
         }
     };
 
+    // Função para visualizar pedidos da mesa
+    const handleViewOrders = (table) => {
+        setCurrentTable(table); // Define a mesa atual
+        setIsOrderModalOpen(true); // Abre a modal de pedidos
+    };
+
     return (
         <div className="create-table-page">
             <h1>Mesas Criadas</h1>
@@ -103,7 +112,8 @@ const CreateTablePage = () => {
                         onEdit={() => handleEditClick(table)}
                         onClear={() => handleClearTable(table.id)}
                         onClose={() => handleCloseTable(table.id)}
-                        onDelete={() => handleDeleteTable(table.id)}  // Adiciona a função de excluir mesa
+                        onDelete={() => handleDeleteTable(table.id)}
+                        onViewOrders={() => handleViewOrders(table)} // Passa a função de visualização de pedidos
                     />
                 ))}
             </div>
@@ -114,15 +124,27 @@ const CreateTablePage = () => {
             {isModalOpen && (
                 <Modal table={currentTable} onClose={() => setIsModalOpen(false)} onSave={handleSaveTable} />
             )}
+            {isOrderModalOpen && (
+                <OrderModal table={currentTable} onClose={() => setIsOrderModalOpen(false)} />
+            )}
         </div>
     );
 };
 
-const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelete }) => {
+const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelete, onViewOrders }) => {
     return (
         <div className={`table-card ${isActive ? 'active' : ''}`} onClick={onClick}>
             <div className="table-header">
-                <h2>Mesa {table.tableNumber}</h2>
+                <h2>
+                    Mesa {table.tableNumber}
+                    <FaClipboardList
+                        className="order-icon"
+                        onClick={(e) => {
+                            e.stopPropagation(); // Previne o clique de expandir/contrair a mesa
+                            onViewOrders(); // Abre a modal de pedidos
+                        }}
+                    />
+                </h2>
                 <span className={`status ${table.status}`}></span>
                 <span className={`arrow ${isActive ? 'right' : 'down'}`}>&#9660;</span>
             </div>
@@ -140,7 +162,7 @@ const TableCard = ({ table, isActive, onClick, onEdit, onClear, onClose, onDelet
                         {table.clients.length > 0 && (
                             <button onClick={onClose}>Fechar Conta</button>
                         )}
-                        <button onClick={onDelete}>Excluir Mesa</button> {/* Botão para excluir a mesa */}
+                        <button onClick={onDelete}>Excluir Mesa</button>
                     </div>
                 </div>
             )}

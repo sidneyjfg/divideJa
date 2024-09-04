@@ -17,6 +17,22 @@ router.post('/orders', (req, res) => {
     });
 });
 
+// Rota para excluir um pedido específico
+router.delete('/orders/:orderId', (req, res) => {
+    const orderId = req.params.orderId;
+    const sql = `
+        DELETE FROM itens_pedido
+        WHERE id = ?
+    `;
+    connection.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error('Erro ao excluir Item do pedido:', err);
+            return res.status(500).json({ message: 'Erro ao excluir Item do pedido' });
+        }
+        res.json({ message: 'Item do pedido excluído com sucesso' });
+    });
+});
+
 
 // Rota para buscar todos os pedidos de um cliente específico
 router.get('/orders/client/:clientId', (req, res) => {
@@ -33,6 +49,59 @@ router.get('/orders/client/:clientId', (req, res) => {
             return res.status(500).json({ message: 'Erro no servidor ao buscar pedidos do cliente' });
         }
         res.json(results);
+    });
+});
+
+// Rota para buscar todos os pedidos de uma mesa específica
+router.get('/orders/table/:tableId', (req, res) => {
+    const tableId = req.params.tableId;
+    const sql = `
+        SELECT o.id AS orderId, o.descricao, o.quantidade, o.preco, o.clientId, c.nome AS clientName
+        FROM itens_pedido o
+        JOIN clients c ON o.clientId = c.id
+        WHERE o.tableId = ?
+    `;
+    connection.query(sql, [tableId], (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar pedidos:', err);
+            return res.status(500).json({ message: 'Erro ao buscar pedidos' });
+        }
+
+        // Organiza os pedidos por nome do cliente
+        const ordersByClient = results.reduce((acc, order) => {
+            if (!acc[order.clientName]) {
+                acc[order.clientName] = [];
+            }
+            acc[order.clientName].push({
+                id: order.orderId,
+                descricao: order.descricao,
+                quantidade: order.quantidade,
+                preco: order.preco,
+                clientId: order.clientId,
+            });
+            return acc;
+        }, {});
+
+        res.json(ordersByClient);
+    });
+});
+
+
+// Rota para atualizar um pedido específico
+router.put('/orders/:orderId', (req, res) => {
+    const orderId = req.params.orderId;
+    const { descricao, quantidade, preco } = req.body;
+    const sql = `
+        UPDATE itens_pedido
+        SET descricao = ?, quantidade = ?, preco = ?
+        WHERE id = ?
+    `;
+    connection.query(sql, [descricao, quantidade, preco, orderId], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar pedido:', err);
+            return res.status(500).json({ message: 'Erro ao atualizar pedido' });
+        }
+        res.json({ message: 'Pedido atualizado com sucesso' });
     });
 });
 

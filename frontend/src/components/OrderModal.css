@@ -1,0 +1,68 @@
+.order-modal {
+    max-width: 80%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.order-item button {
+    padding: 5px 10px;
+    background-color: #f36c21;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.order-item button:hover {
+    background-color: #e55a1c;
+}
+
+.order-modal-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Espaço entre o conteúdo e os botões */
+    gap: 20px; /* Espaço entre os botões */
+}
+
+.order-modal button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #f36c21;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.order-modal button:hover {
+    background-color: #e55a1c;
+}
+
+.order-modal .order-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.orders-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.client-orders-column {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}

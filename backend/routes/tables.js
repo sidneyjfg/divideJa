@@ -85,7 +85,7 @@ router.delete('/tables/:id', (req, res) => {
     });
 });
 
-
+//Atualizar Status de Mesa
 router.put('/tables/:id', (req, res) => {
     const tableId = req.params.id;
     const { status, clients } = req.body;
