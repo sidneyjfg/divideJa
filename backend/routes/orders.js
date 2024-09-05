@@ -105,25 +105,63 @@ router.put('/orders/:orderId', (req, res) => {
     });
 });
 
-// Rota para enviar pedidos para a cozinha
 router.put('/orders/send-to-kitchen/:tableId', (req, res) => {
     const { tableId } = req.params;
 
-    const sql = `
-        UPDATE orders 
-        SET status = 'enviado para cozinha'
+    // Primeiro, criar um pedido na tabela 'orders' para cada cliente da mesa
+    const insertOrderSql = `
+        INSERT INTO orders (clientId, tableId, status)
+        SELECT DISTINCT clientId, tableId, 'enviado para cozinha'
+        FROM itens_pedido
         WHERE tableId = ? AND status = 'pendente'
     `;
 
-    connection.query(sql, [tableId], (err, results) => {
+    connection.query(insertOrderSql, [tableId], (err, orderResults) => {
         if (err) {
-            console.error('Erro ao enviar pedidos para a cozinha:', err);
-            return res.status(500).json({ message: 'Erro ao enviar pedidos' });
+            console.error('Erro ao criar pedidos:', err);
+            return res.status(500).json({ message: 'Erro ao criar pedidos' });
         }
 
-        res.json({ message: 'Pedidos enviados para a cozinha com sucesso!' });
+        const orderIds = orderResults.insertId;
+
+        // Atualizar os itens_pedido associados para o novo status e associar ao pedido
+        const updateItemsSql = `
+            UPDATE itens_pedido
+            SET status = 'enviado para cozinha', orderId = LAST_INSERT_ID()
+            WHERE tableId = ? AND status = 'pendente'
+        `;
+
+        connection.query(updateItemsSql, [tableId], (err, updateResults) => {
+            if (err) {
+                console.error('Erro ao atualizar itens do pedido:', err);
+                return res.status(500).json({ message: 'Erro ao atualizar itens do pedido' });
+            }
+
+            res.json({ message: 'Pedidos enviados para a cozinha com sucesso!', orderIds });
+        });
     });
 });
+
+
+// Rota para enviar pedidos para a cozinha
+router.get('/kitchen/orders', (req, res) => {
+    const sql = `
+        SELECT o.id, o.descricao, o.quantidade, o.preco, t.numero AS tableNumber, c.nome AS clientName
+        FROM itens_pedido o
+        JOIN tables t ON o.tableId = t.id
+        JOIN clients c ON o.clientId = c.id
+        WHERE o.status = 'enviado para cozinha'
+    `;
+
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar pedidos da cozinha:', err);
+            return res.status(500).json({ message: 'Erro no servidor ao buscar pedidos da cozinha' });
+        }
+        res.json(results);
+    });
+});
+
 
 
 module.exports = router;

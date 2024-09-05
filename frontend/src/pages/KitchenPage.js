@@ -9,7 +9,13 @@ const KitchenPage = () => {
         const fetchOrders = async () => {
             try {
                 const response = await api.get('/kitchen/orders');
-                setOrders(response.data);
+                console.log("Resposta backEnd kitchen/orders -> ", response.data);
+                if (Array.isArray(response.data)) {
+                    setOrders(response.data);
+                } else {
+                    console.error('Dados inesperados recebidos:', response.data);
+                    setOrders([]);
+                }
             } catch (error) {
                 console.error('Erro ao buscar pedidos da cozinha:', error);
             }
@@ -18,6 +24,14 @@ const KitchenPage = () => {
         fetchOrders();
     }, []);
 
+    const formatPrice = (price) => {
+        // Tenta converter o preço para número
+        const parsedPrice = parseFloat(price);
+        console.log("formatPrice ", price, parsedPrice);
+        
+        // Verifica se o valor convertido é um número válido
+        return !isNaN(parsedPrice) ? parsedPrice.toFixed(2) : '0.00';
+    };
     return (
         <div className="kitchen-page">
             <h1>Pedidos para Cozinha</h1>
@@ -28,7 +42,7 @@ const KitchenPage = () => {
                             <h3>Mesa {order.tableNumber} - Cliente: {order.clientName}</h3>
                             <p>Pedido: {order.descricao}</p>
                             <p>Quantidade: {order.quantidade}</p>
-                            <p>Preço: R${order.preco.toFixed(2)}</p>
+                            <p>Preço: R${formatPrice(order.preco)}</p>
                         </div>
                     ))}
                 </div>
